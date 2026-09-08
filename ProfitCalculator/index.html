@@ -14,7 +14,7 @@
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 body{margin:0;background:#f1f5f9;color:#172033;font-family:Arial,"Noto Sans Bengali",sans-serif}
-.app{max-width:950px;margin:auto;padding:10px}
+.app{max-width:1100px;margin:auto;padding:10px}
 .header{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;text-align:center;padding:20px 12px;border-radius:18px;margin-bottom:12px;box-shadow:0 7px 20px rgba(79,70,229,.25)}
 .header h1{margin:0 0 5px;font-size:23px}.header p{margin:0;font-size:13px;opacity:.9}
 .card{background:#fff;padding:15px;border-radius:15px;margin-bottom:12px;box-shadow:0 3px 14px rgba(0,0,0,.06)}
@@ -24,10 +24,11 @@ label{display:block;font-size:13px;font-weight:bold;color:#475569;margin-bottom:
 input{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:9px;font-size:16px;background:#fff;color:#172033;outline:none}
 input:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.1)}
 .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-table{width:100%;min-width:730px;border-collapse:collapse}
+table{width:100%;min-width:900px;border-collapse:collapse}
 th{background:#eef2ff;color:#4338ca;padding:10px 6px;font-size:12px;white-space:nowrap}
 td{padding:7px 5px;text-align:center;border-bottom:1px solid #e2e8f0;font-size:13px}
 td input{min-width:80px;padding:9px;font-size:14px}
+td .sale-date{min-width:185px}
 .sale-total,.cost-cell{font-weight:bold}
 .profit{color:#059669;font-weight:bold}.loss{color:#dc2626;font-weight:bold}
 .icon-btn{border:0;width:35px;height:35px;border-radius:8px;font-size:20px;background:#fee2e2;color:#dc2626}
@@ -61,12 +62,23 @@ td input{min-width:80px;padding:9px;font-size:14px}
 .note{background:#fffbeb;color:#92400e;border:1px solid #fde68a;border-radius:9px;padding:10px;margin-top:10px;font-size:12px;line-height:1.6}
 .storage{text-align:center;margin-top:10px;padding:9px;border-radius:8px;background:#ecfdf5;color:#047857;font-size:12px}
 .hidden{display:none!important}
-@media(max-width:650px){.grid{grid-template-columns:1fr}.result-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:400px){.action-grid{gap:5px}.main-btn{font-size:13px;padding:12px 4px}}
+@media(max-width:650px){
+.grid{grid-template-columns:1fr}
+.result-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:400px){
+.action-grid{gap:5px}
+.main-btn{font-size:13px;padding:12px 4px}
+}
 @media print{
-@page{size:A4;margin:12mm}body{background:#fff}.app{max-width:none;padding:0}
-.no-print,.history-section{display:none!important}.header{background:#fff;color:#111;box-shadow:none;border:2px solid #333}
-.card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}.table-wrap{overflow:visible}table{min-width:0}
+@page{size:A4;margin:12mm}
+body{background:#fff}
+.app{max-width:none;padding:0}
+.no-print,.history-section{display:none!important}
+.header{background:#fff;color:#111;box-shadow:none;border:2px solid #333}
+.card{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+.table-wrap{overflow:visible}
+table{min-width:0}
 th{background:#eee!important;color:#111!important}
 }
 </style>
@@ -78,7 +90,7 @@ th{background:#eee!important;color:#111!important}
 
 <div class="header">
 <h1>💰 লাভ-ক্ষতি Calculator</h1>
-<p>Product Sale হিসাব • History • Backup • Excel • PDF</p>
+<p>Product Sale হিসাব • Date & Time • History • Backup • Excel • PDF</p>
 </div>
 
 <div class="card">
@@ -89,6 +101,11 @@ th{background:#eee!important;color:#111!important}
 <div>
 <label>Product Name</label>
 <input id="productName" type="text" placeholder="যেমন: T-Shirt">
+</div>
+
+<div>
+<label>📅 Product Date & Time</label>
+<input id="productDateTime" type="datetime-local">
 </div>
 
 <div>
@@ -121,19 +138,35 @@ th{background:#eee!important;color:#111!important}
 <table>
 <thead>
 <tr>
-<th>#</th><th>Sale Price</th><th>Quantity</th><th>Total Sale</th><th>Cost</th><th>লাভ / ক্ষতি</th><th>×</th>
+<th>#</th>
+<th>Sale Date & Time</th>
+<th>Sale Price</th>
+<th>Quantity</th>
+<th>Total Sale</th>
+<th>Cost</th>
+<th>লাভ / ক্ষতি</th>
+<th>×</th>
 </tr>
 </thead>
 
 <tbody id="saleBody">
 <tr>
 <td class="row-number">1</td>
-<td><input class="sale-price" type="number" min="0" step="0.01" placeholder="100" oninput="calculate()"></td>
-<td><input class="sale-qty" type="number" min="0" step="1" placeholder="20" oninput="calculate()"></td>
+<td>
+<input class="sale-date" type="datetime-local">
+</td>
+<td>
+<input class="sale-price" type="number" min="0" step="0.01" placeholder="100" oninput="calculate()">
+</td>
+<td>
+<input class="sale-qty" type="number" min="0" step="1" placeholder="20" oninput="calculate()">
+</td>
 <td class="sale-total">৳0.00</td>
 <td class="cost-cell">৳0.00</td>
 <td class="row-profit">৳0.00</td>
-<td><button class="icon-btn" onclick="removeSaleRow(this)">×</button></td>
+<td>
+<button class="icon-btn" onclick="removeSaleRow(this)">×</button>
+</td>
 </tr>
 </tbody>
 </table>
@@ -158,6 +191,10 @@ th{background:#eee!important;color:#111!important}
 <input id="jsonInput" type="file" accept=".json,application/json" style="display:none" onchange="uploadData(event)">
 
 <div class="note">
+<b>Product Date & Time:</b> নতুন হিসাব শুরু হলে automatic current date/time থাকবে। চাইলে manually পরিবর্তন করতে পারবেন। History/Rework থেকে load করলে saved date/time পরিবর্তন হবে না।
+<br><br>
+<b>Sale Date & Time:</b> প্রতিটি Sale Rate-এর জন্য automatic current date/time থাকবে। চাইলে manually পরিবর্তন করতে পারবেন।
+<br><br>
 <b>Save:</b> হিসাব History-তে থাকবে এবং Product Name অনুযায়ী JSON backup download হবে।
 <br><br>
 <b>Data File:</b> JSON backup নির্বাচন করে পুরোনো হিসাব আবার load করে পরিবর্তন করতে পারবেন।
@@ -200,13 +237,66 @@ th{background:#eee!important;color:#111!important}
 </div>
 
 <script>
-const STORAGE_KEY="PROFIT_CALCULATOR_HISTORY_V4";
+const STORAGE_KEY="PROFIT_CALCULATOR_HISTORY_V5";
 let currentData=null;
 
-function n(v){const x=Number(v);return Number.isFinite(x)?x:0}
+/* -------------------- DATE & TIME -------------------- */
+
+function getCurrentDateTime(){
+const now=new Date();
+
+const pad=x=>String(x).padStart(2,"0");
+
+return now.getFullYear()+"-"+
+pad(now.getMonth()+1)+"-"+
+pad(now.getDate())+"T"+
+pad(now.getHours())+":"+
+pad(now.getMinutes());
+}
+
+function formatDateTime(value){
+if(!value)return "";
+
+const d=new Date(value);
+
+if(Number.isNaN(d.getTime())){
+return String(value);
+}
+
+return d.toLocaleString("bn-BD",{
+year:"numeric",
+month:"2-digit",
+day:"2-digit",
+hour:"2-digit",
+minute:"2-digit",
+hour12:true
+});
+}
+
+/*
+Only new records get automatic date/time.
+When loading an existing record, its saved date/time is preserved.
+*/
+function setNewRecordDateTime(){
+const productDate=document.getElementById("productDateTime");
+
+if(!productDate.value){
+productDate.value=getCurrentDateTime();
+}
+}
+
+/* -------------------- BASIC HELPERS -------------------- */
+
+function n(v){
+const x=Number(v);
+return Number.isFinite(x)?x:0;
+}
 
 function money(v){
-return "৳"+n(v).toLocaleString("en-BD",{minimumFractionDigits:2,maximumFractionDigits:2});
+return "৳"+n(v).toLocaleString("en-BD",{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+});
 }
 
 function safeName(name){
@@ -222,13 +312,21 @@ div.textContent=String(text??"");
 return div.innerHTML;
 }
 
+/* -------------------- STORAGE -------------------- */
+
 function getHistory(){
 try{
 const x=localStorage.getItem(STORAGE_KEY);
+
 if(!x)return[];
+
 const p=JSON.parse(x);
+
 return Array.isArray(p)?p:[];
-}catch(e){return[]}
+
+}catch(e){
+return[];
+}
 }
 
 function saveHistory(data){
@@ -241,20 +339,55 @@ return false;
 }
 }
 
-function addSaleRow(){
-const tbody=document.getElementById("saleBody");
+/* -------------------- SALE ROW -------------------- */
+
+function createSaleRow(sale={}){
 const row=document.createElement("tr");
+
+const saleDate=sale.dateTime||getCurrentDateTime();
 
 row.innerHTML=`
 <td class="row-number"></td>
-<td><input class="sale-price" type="number" min="0" step="0.01" placeholder="120" oninput="calculate()"></td>
-<td><input class="sale-qty" type="number" min="0" step="1" placeholder="30" oninput="calculate()"></td>
-<td class="sale-total">৳0.00</td>
-<td class="cost-cell">৳0.00</td>
-<td class="row-profit">৳0.00</td>
-<td><button class="icon-btn" onclick="removeSaleRow(this)">×</button></td>`;
 
-tbody.appendChild(row);
+<td>
+<input class="sale-date" type="datetime-local"
+value="${escapeHtml(saleDate)}">
+</td>
+
+<td>
+<input class="sale-price" type="number"
+min="0" step="0.01"
+value="${sale.price!=null?n(sale.price):""}"
+placeholder="100"
+oninput="calculate()">
+</td>
+
+<td>
+<input class="sale-qty" type="number"
+min="0" step="1"
+value="${sale.qty!=null?n(sale.qty):""}"
+placeholder="20"
+oninput="calculate()">
+</td>
+
+<td class="sale-total">৳0.00</td>
+
+<td class="cost-cell">৳0.00</td>
+
+<td class="row-profit">৳0.00</td>
+
+<td>
+<button class="icon-btn" onclick="removeSaleRow(this)">×</button>
+</td>`;
+
+return row;
+}
+
+function addSaleRow(){
+const tbody=document.getElementById("saleBody");
+
+tbody.appendChild(createSaleRow());
+
 updateRowNumbers();
 calculate();
 }
@@ -268,6 +401,7 @@ return;
 }
 
 btn.closest("tr").remove();
+
 updateRowNumbers();
 calculate();
 }
@@ -282,28 +416,46 @@ function getSales(){
 const sales=[];
 
 document.querySelectorAll("#saleBody tr").forEach(row=>{
+
+const dateTime=row.querySelector(".sale-date").value;
 const price=n(row.querySelector(".sale-price").value);
 const qty=n(row.querySelector(".sale-qty").value);
 
-if(price>0&&qty>0)sales.push({price,qty});
+if(price>0&&qty>0){
+
+sales.push({
+dateTime:dateTime||getCurrentDateTime(),
+price,
+qty
+});
+
+}
+
 });
 
 return sales;
 }
 
+/* -------------------- CALCULATION -------------------- */
+
 function calculate(){
+
 const batch=n(document.getElementById("batch").value);
 const productCost=n(document.getElementById("productCost").value);
 const vanCost=n(document.getElementById("vanCost").value);
 const otherCost=n(document.getElementById("otherCost").value);
 
 const extraCost=vanCost+otherCost;
+
 const extraPerPiece=batch>0?extraCost/batch:0;
+
 const actualCostPerPiece=productCost+extraPerPiece;
 
-let totalSale=0,soldQty=0;
+let totalSale=0;
+let soldQty=0;
 
 document.querySelectorAll("#saleBody tr").forEach(row=>{
+
 const price=n(row.querySelector(".sale-price").value);
 const qty=n(row.querySelector(".sale-qty").value);
 
@@ -318,39 +470,77 @@ row.querySelector(".sale-total").textContent=money(sale);
 row.querySelector(".cost-cell").textContent=money(cost);
 
 const cell=row.querySelector(".row-profit");
+
 cell.classList.remove("profit","loss");
 
 if(profit>0){
+
 cell.textContent="+"+money(profit);
 cell.classList.add("profit");
+
 }else if(profit<0){
+
 cell.textContent="-"+money(Math.abs(profit));
 cell.classList.add("loss");
+
 }else{
+
 cell.textContent=money(0);
+
 }
+
 });
 
 const soldProductCost=soldQty*productCost;
-const soldExtraCost=batch>0?extraCost*soldQty/batch:0;
+
+const soldExtraCost=batch>0
+?extraCost*soldQty/batch
+:0;
+
 const totalCost=soldProductCost+soldExtraCost;
+
 const profitLoss=totalSale-totalCost;
+
 const remaining=Math.max(0,batch-soldQty);
-const averageSale=soldQty>0?totalSale/soldQty:0;
-const unitProfit=soldQty>0?profitLoss/soldQty:0;
-const margin=totalSale>0?(profitLoss/totalSale)*100:0;
+
+const averageSale=soldQty>0
+?totalSale/soldQty
+:0;
+
+const unitProfit=soldQty>0
+?profitLoss/soldQty
+:0;
+
+const margin=totalSale>0
+?(profitLoss/totalSale)*100
+:0;
 
 currentData={
-batch,productCost,vanCost,otherCost,extraCost,soldQty,remaining,
-totalSale,soldProductCost,soldExtraCost,totalCost,profitLoss,
-averageSale,actualCostPerPiece,unitProfit,margin
+batch,
+productCost,
+vanCost,
+otherCost,
+extraCost,
+soldQty,
+remaining,
+totalSale,
+soldProductCost,
+soldExtraCost,
+totalCost,
+profitLoss,
+averageSale,
+actualCostPerPiece,
+unitProfit,
+margin
 };
 
 showResult(currentData);
+
 return currentData;
 }
 
 function showResult(d){
+
 document.getElementById("totalSale").textContent=money(d.totalSale);
 document.getElementById("soldProductCost").textContent=money(d.soldProductCost);
 document.getElementById("soldExtraCost").textContent=money(d.soldExtraCost);
@@ -365,83 +555,154 @@ document.getElementById("summaryUnitCost").textContent=money(d.actualCostPerPiec
 const unit=document.getElementById("summaryUnitProfit");
 
 if(d.unitProfit>0){
+
 unit.textContent="+"+money(d.unitProfit);
 unit.style.color="#059669";
+
 }else if(d.unitProfit<0){
+
 unit.textContent="-"+money(Math.abs(d.unitProfit));
 unit.style.color="#dc2626";
+
 }else{
+
 unit.textContent=money(0);
 unit.style.color="#475569";
+
 }
 
-document.getElementById("summaryMargin").textContent=d.margin.toFixed(2)+"%";
+document.getElementById("summaryMargin").textContent=
+d.margin.toFixed(2)+"%";
 
 const status=document.getElementById("resultStatus");
+
 status.className="status";
 
 if(d.profitLoss>0){
+
 status.classList.add("profit-status");
 status.textContent="🟢 মোট লাভ: "+money(d.profitLoss);
+
 }else if(d.profitLoss<0){
+
 status.classList.add("loss-status");
 status.textContent="🔴 মোট ক্ষতি: "+money(Math.abs(d.profitLoss));
+
 }else{
+
 status.classList.add("zero-status");
 status.textContent="⚖️ লাভও হয়নি, ক্ষতিও হয়নি";
+
 }
+
 }
+
+/* -------------------- CREATE DATA -------------------- */
 
 function createData(){
-const productName=document.getElementById("productName").value.trim();
+
+const productName=
+document.getElementById("productName").value.trim();
+
+const productDateTime=
+document.getElementById("productDateTime").value;
+
 const result=calculate();
+
 const sales=getSales();
 
-if(!productName){alert("Product Name দিন।");return null}
-if(result.batch<=0){alert("Batch / মোট পিস দিন।");return null}
-if(!sales.length){alert("কমপক্ষে একটি Sale Price এবং Quantity দিন।");return null}
+if(!productName){
+
+alert("Product Name দিন।");
+return null;
+
+}
+
+if(!productDateTime){
+
+alert("Product Date & Time দিন।");
+return null;
+
+}
+
+if(result.batch<=0){
+
+alert("Batch / মোট পিস দিন।");
+return null;
+
+}
+
+if(!sales.length){
+
+alert("কমপক্ষে একটি Sale Price এবং Quantity দিন।");
+return null;
+
+}
 
 return{
+
 app:"Profit Calculator",
-version:"4.0",
+version:"5.0",
+
 id:Date.now(),
+
 productName,
+
+productDateTime,
+
 batch:result.batch,
+
 productCost:result.productCost,
 vanCost:result.vanCost,
 otherCost:result.otherCost,
+
 sales,
+
 totalSale:result.totalSale,
 totalCost:result.totalCost,
 profitLoss:result.profitLoss,
+
 soldQty:result.soldQty,
 remaining:result.remaining,
+
 averageSale:result.averageSale,
 actualCostPerPiece:result.actualCostPerPiece,
 margin:result.margin,
-createdAt:new Date().toLocaleString("bn-BD")
+
+createdAt:new Date().toISOString()
+
 };
+
 }
 
-/* SAVE
-   Same product name => same filename.
-   Browser download cannot silently overwrite an existing file.
-   Chrome may add (1), (2) if old file exists.
-*/
+/* -------------------- SAVE -------------------- */
+
 function saveData(){
+
 const data=createData();
+
 if(!data)return;
 
 const history=getHistory();
 
-/* Existing same product name update instead of duplicate history */
 const sameName=history.findIndex(
-x=>String(x.productName).trim().toLowerCase()===data.productName.trim().toLowerCase()
+x=>String(x.productName).trim().toLowerCase()
+===
+data.productName.trim().toLowerCase()
 );
 
 if(sameName>=0){
+
+/*
+Keep original History ID.
+Product Date & Time comes from the edited form,
+so manual changes are preserved.
+*/
+
 data.id=history[sameName].id;
+
 history.splice(sameName,1);
+
 }
 
 history.unshift(data);
@@ -449,18 +710,25 @@ history.unshift(data);
 if(!saveHistory(history))return;
 
 downloadJSON(data);
+
 renderHistory();
 
-alert("✅ Save হয়েছে!\n\nHistory update হয়েছে এবং JSON backup download হয়েছে।");
+alert(
+"✅ Save হয়েছে!\n\n"+
+"History update হয়েছে এবং JSON backup download হয়েছে।"
+);
+
 }
 
 function downloadJSON(data){
+
 const blob=new Blob(
 [JSON.stringify(data,null,2)],
 {type:"application/json"}
 );
 
 const url=URL.createObjectURL(blob);
+
 const a=document.createElement("a");
 
 a.href=url;
@@ -470,21 +738,30 @@ document.body.appendChild(a);
 a.click();
 a.remove();
 
-setTimeout(()=>URL.revokeObjectURL(url),1000);
+setTimeout(()=>{
+URL.revokeObjectURL(url);
+},1000);
+
 }
+
+/* -------------------- DATA FILE -------------------- */
 
 function openDataFile(){
 document.getElementById("jsonInput").click();
 }
 
 function uploadData(event){
+
 const file=event.target.files[0];
+
 if(!file)return;
 
 const reader=new FileReader();
 
 reader.onload=function(){
+
 try{
+
 const data=JSON.parse(reader.result);
 
 if(!data.productName||!Array.isArray(data.sales)){
@@ -493,165 +770,335 @@ throw new Error("Invalid");
 
 loadData(data);
 
-alert("✅ Data File loaded!\n\nএখন পরিবর্তন করে আবার Save করতে পারবেন।");
+alert(
+"✅ Data File loaded!\n\n"+
+"এখন পরিবর্তন করে আবার Save করতে পারবেন।"
+);
+
 }catch(e){
-alert("❌ ভুল Data File।\n\nসঠিক JSON file নির্বাচন করুন।");
+
+alert(
+"❌ ভুল Data File।\n\n"+
+"সঠিক JSON file নির্বাচন করুন।"
+);
+
 }
+
 };
 
 reader.readAsText(file);
+
 event.target.value="";
+
 }
+
+/* -------------------- LOAD DATA -------------------- */
 
 function loadData(data){
-document.getElementById("productName").value=data.productName||"";
-document.getElementById("batch").value=data.batch||"";
-document.getElementById("productCost").value=data.productCost||0;
-document.getElementById("vanCost").value=data.vanCost||0;
-document.getElementById("otherCost").value=data.otherCost||0;
+
+document.getElementById("productName").value=
+data.productName||"";
+
+/*
+Important:
+Existing data keeps its saved date/time.
+Old V4 data has no productDateTime, so only those old
+records get a fallback date/time.
+*/
+
+document.getElementById("productDateTime").value=
+data.productDateTime||getCurrentDateTime();
+
+document.getElementById("batch").value=
+data.batch??"";
+
+document.getElementById("productCost").value=
+data.productCost??0;
+
+document.getElementById("vanCost").value=
+data.vanCost??0;
+
+document.getElementById("otherCost").value=
+data.otherCost??0;
 
 const tbody=document.getElementById("saleBody");
+
 tbody.innerHTML="";
 
-(data.sales||[]).forEach((sale,index)=>{
-const row=document.createElement("tr");
+if(Array.isArray(data.sales)&&data.sales.length){
 
-row.innerHTML=`
-<td class="row-number">${index+1}</td>
-<td><input class="sale-price" type="number" min="0" step="0.01" value="${n(sale.price)}" oninput="calculate()"></td>
-<td><input class="sale-qty" type="number" min="0" step="1" value="${n(sale.qty)}" oninput="calculate()"></td>
-<td class="sale-total">৳0.00</td>
-<td class="cost-cell">৳0.00</td>
-<td class="row-profit">৳0.00</td>
-<td><button class="icon-btn" onclick="removeSaleRow(this)">×</button></td>`;
+data.sales.forEach(sale=>{
 
-tbody.appendChild(row);
+/*
+New V5 records contain dateTime.
+Older records without dateTime get a one-time
+fallback value when loaded.
+*/
+
+const row=createSaleRow({
+dateTime:sale.dateTime||getCurrentDateTime(),
+price:sale.price,
+qty:sale.qty
 });
 
-if(!data.sales||!data.sales.length)addSaleRow();
+tbody.appendChild(row);
+
+});
+
+}else{
+
+tbody.appendChild(createSaleRow());
+
+}
 
 updateRowNumbers();
+
 calculate();
 
-window.scrollTo({top:0,behavior:"smooth"});
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
 }
+
+/* -------------------- DOWNLOAD MENU -------------------- */
 
 function toggleDownload(){
-document.getElementById("downloadMenu").classList.toggle("show");
+
+document
+.getElementById("downloadMenu")
+.classList.toggle("show");
+
 }
 
-/* EXCEL */
+/* -------------------- EXCEL -------------------- */
+
 function downloadExcel(){
+
 const data=createData();
+
 if(!data)return;
 
+createExcelRecord(data);
+
+}
+
+function createExcelRecord(data){
+
 let rows=`
-<tr><th colspan="6">Profit Calculator</th></tr>
-<tr><td>Product Name</td><td colspan="5">${escapeHtml(data.productName)}</td></tr>
+
+<tr><th colspan="7">Profit Calculator</th></tr>
+
 <tr>
-<td>Batch</td><td>${data.batch}</td>
-<td>Product Cost</td><td>${data.productCost}</td>
-<td>Van Vara</td><td>${data.vanCost}</td>
+<td>Product Name</td>
+<td colspan="6">${escapeHtml(data.productName)}</td>
 </tr>
+
 <tr>
-<td>Others</td><td>${data.otherCost}</td>
-<td>Sold</td><td>${data.soldQty}</td>
-<td>Remaining</td><td>${data.remaining}</td>
+<td>Product Date & Time</td>
+<td colspan="6">${escapeHtml(formatDateTime(data.productDateTime))}</td>
 </tr>
+
 <tr>
-<th>#</th><th>Sale Price</th><th>Quantity</th>
-<th>Total Sale</th><th>Cost</th><th>Profit/Loss</th>
-</tr>`;
+<td>Batch</td>
+<td>${data.batch}</td>
+<td>Product Cost</td>
+<td>${data.productCost}</td>
+<td>Van Vara</td>
+<td>${data.vanCost}</td>
+<td>Others</td>
+<td>${data.otherCost}</td>
+</tr>
+
+<tr>
+<td>Sold</td>
+<td>${data.soldQty}</td>
+<td>Remaining</td>
+<td>${data.remaining}</td>
+<td>Average Sale</td>
+<td>${n(data.averageSale).toFixed(2)}</td>
+<td>Margin</td>
+<td>${n(data.margin).toFixed(2)}%</td>
+</tr>
+
+<tr>
+<th>#</th>
+<th>Sale Date & Time</th>
+<th>Sale Price</th>
+<th>Quantity</th>
+<th>Total Sale</th>
+<th>Cost</th>
+<th>Profit/Loss</th>
+</tr>
+`;
 
 data.sales.forEach((sale,i)=>{
-const saleTotal=n(sale.price)*n(sale.qty);
-const cost=data.actualCostPerPiece*n(sale.qty);
-const profit=saleTotal-cost;
+
+const saleTotal=
+n(sale.price)*n(sale.qty);
+
+const cost=
+n(data.actualCostPerPiece)*n(sale.qty);
+
+const profit=
+saleTotal-cost;
 
 rows+=`
+
 <tr>
 <td>${i+1}</td>
+<td>${escapeHtml(formatDateTime(sale.dateTime))}</td>
 <td>${n(sale.price).toFixed(2)}</td>
 <td>${n(sale.qty)}</td>
 <td>${saleTotal.toFixed(2)}</td>
 <td>${cost.toFixed(2)}</td>
 <td>${profit.toFixed(2)}</td>
-</tr>`;
+</tr>
+`;
+
 });
 
 rows+=`
+
 <tr>
-<th colspan="3">TOTAL</th>
+<th colspan="4">TOTAL</th>
 <th>${n(data.totalSale).toFixed(2)}</th>
 <th>${n(data.totalCost).toFixed(2)}</th>
 <th>${n(data.profitLoss).toFixed(2)}</th>
-</tr>`;
+</tr>
+`;
 
 const html=`
-<html><head><meta charset="UTF-8">
+
+<html>
+<head>
+<meta charset="UTF-8">
+
 <style>
-table{border-collapse:collapse;width:100%}
-th,td{border:1px solid #888;padding:8px}
-th{background:#dbeafe}
+table{
+border-collapse:collapse;
+width:100%;
+}
+
+th,td{
+border:1px solid #888;
+padding:8px;
+}
+
+th{
+background:#dbeafe;
+}
 </style>
 
-</head><body><table>${rows}</table></body></html>`;
+</head>
 
-const blob=new Blob(["\ufeff",html],{type:"application/vnd.ms-excel"});
+<body>
+
+<table>${rows}</table>
+
+</body>
+</html>
+`;
+
+const blob=new Blob(
+["\ufeff",html],
+{type:"application/vnd.ms-excel"}
+);
+
 const url=URL.createObjectURL(blob);
+
 const a=document.createElement("a");
 
 a.href=url;
 a.download=safeName(data.productName)+"-profit.xls";
 
 document.body.appendChild(a);
+
 a.click();
+
 a.remove();
 
-setTimeout(()=>URL.revokeObjectURL(url),1000);
+setTimeout(()=>{
+URL.revokeObjectURL(url);
+},1000);
+
 }
 
-/* PDF */
+/* -------------------- PDF -------------------- */
+
 function downloadPDF(){
+
 const data=createData();
+
 if(!data)return;
+
 createPDFForRecord(data);
+
 }
 
 function createPDFForRecord(data){
-const costPerPiece=data.actualCostPerPiece||
+
+const costPerPiece=
+data.actualCostPerPiece||
 (
 n(data.batch)>0
-?n(data.productCost)+(n(data.vanCost)+n(data.otherCost))/n(data.batch)
-:n(data.productCost)
+?
+n(data.productCost)+
+(n(data.vanCost)+n(data.otherCost))/n(data.batch)
+:
+n(data.productCost)
 );
 
 let rows="";
 
 data.sales.forEach((sale,i)=>{
-const saleTotal=n(sale.price)*n(sale.qty);
-const cost=costPerPiece*n(sale.qty);
-const profit=saleTotal-cost;
+
+const saleTotal=
+n(sale.price)*n(sale.qty);
+
+const cost=
+costPerPiece*n(sale.qty);
+
+const profit=
+saleTotal-cost;
 
 rows+=`
 
 <tr>
+
 <td>${i+1}</td>
+
+<td>${escapeHtml(formatDateTime(sale.dateTime))}</td>
+
 <td>৳${n(sale.price).toFixed(2)}</td>
+
 <td>${n(sale.qty)}</td>
+
 <td>৳${saleTotal.toFixed(2)}</td>
+
 <td>৳${cost.toFixed(2)}</td>
+
 <td class="${profit>=0?"profit":"loss"}">
 ${profit>=0?"+":"-"}৳${Math.abs(profit).toFixed(2)}
 </td>
-</tr>`;
+
+</tr>
+`;
+
 });
 
 const popup=window.open("","_blank");
 
 if(!popup){
-alert("Chrome Popup blocked করেছে। Popup allow করে আবার PDF চাপুন।");
+
+alert(
+"Chrome Popup blocked করেছে। "+
+"Popup allow করে আবার PDF চাপুন।"
+);
+
 return;
+
 }
 
 popup.document.write(`
@@ -659,272 +1106,505 @@ popup.document.write(`
 <!DOCTYPE html>
 
 <html>
+
 <head>
+
 <meta charset="UTF-8">
+
 <title>${escapeHtml(data.productName)}</title>
+
 <style>
-@page{size:A4;margin:12mm}
-body{font-family:Arial,sans-serif;color:#111}
-h1{text-align:center}
-.date{text-align:center;color:#666;margin-bottom:20px}
-.info{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
-.box{border:1px solid #ddd;padding:9px}
-table{width:100%;border-collapse:collapse}
-th,td{border:1px solid #999;padding:8px;text-align:center}
-th{background:#eee}
-.profit{color:green;font-weight:bold}.loss{color:red;font-weight:bold}
-.summary{margin-top:20px;border:1px solid #ddd;padding:12px}
-.summary div{padding:7px;border-bottom:1px solid #eee}
-.total{text-align:center;font-size:20px;font-weight:bold;margin-top:18px}
+
+@page{
+size:A4;
+margin:12mm;
+}
+
+body{
+font-family:Arial,"Noto Sans Bengali",sans-serif;
+color:#111;
+}
+
+h1{
+text-align:center;
+}
+
+.date{
+text-align:center;
+color:#666;
+margin-bottom:20px;
+}
+
+.info{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+margin-bottom:20px;
+}
+
+.box{
+border:1px solid #ddd;
+padding:9px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+}
+
+th,td{
+border:1px solid #999;
+padding:7px;
+text-align:center;
+font-size:12px;
+}
+
+th{
+background:#eee;
+}
+
+.profit{
+color:green;
+font-weight:bold;
+}
+
+.loss{
+color:red;
+font-weight:bold;
+}
+
+.summary{
+margin-top:20px;
+border:1px solid #ddd;
+padding:12px;
+}
+
+.summary div{
+padding:7px;
+border-bottom:1px solid #eee;
+}
+
+.summary div:last-child{
+border-bottom:0;
+}
+
+.total{
+text-align:center;
+font-size:20px;
+font-weight:bold;
+margin-top:18px;
+}
+
 </style>
+
 </head>
+
 <body>
+
 <h1>💰 Profit Calculator</h1>
-<div class="date">${escapeHtml(data.createdAt||"")}</div>
+
+<div class="date">
+Product Date & Time:
+${escapeHtml(formatDateTime(data.productDateTime))}
+</div>
 
 <div class="info">
-<div class="box"><b>Product:</b> ${escapeHtml(data.productName)}</div>
-<div class="box"><b>Batch:</b> ${data.batch} পিস</div>
-<div class="box"><b>Product Cost:</b> ৳${n(data.productCost).toFixed(2)}</div>
-<div class="box"><b>Van Vara:</b> ৳${n(data.vanCost).toFixed(2)}</div>
-<div class="box"><b>Others:</b> ৳${n(data.otherCost).toFixed(2)}</div>
-<div class="box"><b>Sold:</b> ${data.soldQty} পিস</div>
+
+<div class="box">
+<b>Product:</b>
+${escapeHtml(data.productName)}
+</div>
+
+<div class="box">
+<b>Batch:</b>
+${data.batch} পিস
+</div>
+
+<div class="box">
+<b>Product Cost:</b>
+৳${n(data.productCost).toFixed(2)}
+</div>
+
+<div class="box">
+<b>Van Vara:</b>
+৳${n(data.vanCost).toFixed(2)}
+</div>
+
+<div class="box">
+<b>Others:</b>
+৳${n(data.otherCost).toFixed(2)}
+</div>
+
+<div class="box">
+<b>Sold:</b>
+${data.soldQty} পিস
+</div>
+
 </div>
 
 <table>
+
 <thead>
-<tr><th>#</th><th>Sale Price</th><th>Quantity</th><th>Total Sale</th><th>Cost</th><th>Profit/Loss</th></tr>
+
+<tr>
+<th>#</th>
+<th>Sale Date & Time</th>
+<th>Sale Price</th>
+<th>Quantity</th>
+<th>Total Sale</th>
+<th>Cost</th>
+<th>Profit/Loss</th>
+</tr>
+
 </thead>
-<tbody>${rows}</tbody>
+
+<tbody>
+
+${rows}
+
+</tbody>
+
 </table>
 
 <div class="summary">
-<div>Total Sale: <b>৳${n(data.totalSale).toFixed(2)}</b></div>
-<div>Total Cost: <b>৳${n(data.totalCost).toFixed(2)}</b></div>
-<div>Remaining: <b>${data.remaining} পিস</b></div>
-<div>Average Sale: <b>৳${n(data.averageSale).toFixed(2)}</b></div>
-<div>Profit Margin: <b>${n(data.margin).toFixed(2)}%</b></div>
+
+<div>
+Total Sale:
+<b>৳${n(data.totalSale).toFixed(2)}</b>
+</div>
+
+<div>
+Total Cost:
+<b>৳${n(data.totalCost).toFixed(2)}</b>
+</div>
+
+<div>
+Remaining:
+<b>${data.remaining} পিস</b>
+</div>
+
+<div>
+Average Sale:
+<b>৳${n(data.averageSale).toFixed(2)}</b>
+</div>
+
+<div>
+Actual Cost / Sold Piece:
+<b>৳${n(data.actualCostPerPiece).toFixed(2)}</b>
+</div>
+
+<div>
+Profit Margin:
+<b>${n(data.margin).toFixed(2)}%</b>
+</div>
+
 </div>
 
 <div class="total ${n(data.profitLoss)>=0?"profit":"loss"}">
+
 ${n(data.profitLoss)>=0?"🟢 মোট লাভ":"🔴 মোট ক্ষতি"}:
+
 ৳${Math.abs(n(data.profitLoss)).toFixed(2)}
+
 </div>
 
 <script>
+
 window.onload=function(){
-setTimeout(function(){window.print()},500);
+
+setTimeout(function(){
+window.print();
+},500);
+
 };
+
 <\/script>
+
 </body>
-</html>`);
+
+</html>
+`);
 
 popup.document.close();
+
 }
 
-/* HISTORY */
+/* -------------------- HISTORY -------------------- */
+
 function findHistory(id){
-return getHistory().find(x=>Number(x.id)===Number(id));
+
+return getHistory().find(
+x=>Number(x.id)===Number(id)
+);
+
 }
 
 function renderHistory(){
-const list=document.getElementById("historyList");
-const search=document.getElementById("historySearch").value.trim().toLowerCase();
 
-const filtered=getHistory().filter(item=>
-String(item.productName).toLowerCase().includes(search)
+const list=
+document.getElementById("historyList");
+
+const search=
+document.getElementById("historySearch")
+.value.trim()
+.toLowerCase();
+
+const filtered=
+getHistory().filter(item=>
+String(item.productName)
+.toLowerCase()
+.includes(search)
 );
 
 if(!filtered.length){
+
 list.innerHTML=`
+
 <div class="empty">
+
 📭 কোনো History নেই।
-<br>প্রথমে একটি হিসাব <b>Save</b> করুন।
-</div>`;
+
+<br>
+
+প্রথমে একটি হিসাব
+<b>Save</b> করুন।
+
+</div>
+`;
+
 return;
+
 }
 
 list.innerHTML="";
 
 filtered.forEach(item=>{
+
 const profit=n(item.profitLoss);
+
 const div=document.createElement("div");
 
 div.className="history-item";
 
 div.innerHTML=`
+
 <div class="history-header">
+
 <div>
-<div class="history-name">${escapeHtml(item.productName)}</div>
-<div class="history-date">${escapeHtml(item.createdAt||"")}</div>
+
+<div class="history-name">
+${escapeHtml(item.productName)}
 </div>
-<strong>${item.soldQty} পিস</strong>
+
+<div class="history-date">
+
+📅 Product:
+${escapeHtml(
+formatDateTime(
+item.productDateTime||item.createdAt
+)
+)}
+
+</div>
+
+</div>
+
+<strong>
+${item.soldQty} পিস
+</strong>
+
 </div>
 
 <div class="history-details">
-Batch: ${item.batch} পিস<br>
-Total Sale: ${money(item.totalSale)}<br>
+
+Batch: ${item.batch} পিস
+<br>
+
+Sold: ${item.soldQty} পিস
+<br>
+
+Total Sale: ${money(item.totalSale)}
+<br>
+
 Total Cost: ${money(item.totalCost)}
+
 </div>
 
-<div class="history-result ${profit>=0?"history-profit":"history-loss"}">
-${profit>=0?"🟢 লাভ: +":"🔴 ক্ষতি: -"}${money(Math.abs(profit))}
+<div class="history-result
+${profit>=0?"history-profit":"history-loss"}">
+
+${profit>=0?"🟢 লাভ: +":"🔴 ক্ষতি: -"}
+${money(Math.abs(profit))}
+
 </div>
 
 <div class="history-actions">
-<button class="history-load" onclick="loadHistory(${item.id})">✏️ Rework</button>
-<button class="history-excel" onclick="historyExcel(${item.id})">📊 Excel</button>
-<button class="history-pdf" onclick="historyPDF(${item.id})">📄 PDF</button>
-<button class="history-delete" onclick="deleteHistory(${item.id})">🗑 Delete</button>
-</div>`;
+
+<button
+class="history-load"
+onclick="loadHistory(${item.id})">
+✏️ Rework
+</button>
+
+<button
+class="history-excel"
+onclick="historyExcel(${item.id})">
+📊 Excel
+</button>
+
+<button
+class="history-pdf"
+onclick="historyPDF(${item.id})">
+📄 PDF
+</button>
+
+<button
+class="history-delete"
+onclick="deleteHistory(${item.id})">
+🗑 Delete
+</button>
+
+</div>
+`;
 
 list.appendChild(div);
+
 });
+
 }
 
 function loadHistory(id){
+
 const item=findHistory(id);
 
 if(!item){
+
 alert("History পাওয়া যায়নি।");
 return;
+
 }
 
 loadData(item);
-alert("✏️ Rework-এর জন্য হিসাব loaded হয়েছে।");
+
+alert(
+"✏️ Rework-এর জন্য হিসাব loaded হয়েছে।\n\n"+
+"Saved Date & Time অপরিবর্তিত রাখা হয়েছে।"
+);
+
 }
 
 function historyExcel(id){
+
 const item=findHistory(id);
-if(!item){alert("History পাওয়া যায়নি।");return}
-createExcelRecord(item);
+
+if(!item){
+
+alert("History পাওয়া যায়নি।");
+return;
+
 }
 
-function createExcelRecord(data){
-let rows=`
-<tr><th colspan="6">Profit Calculator</th></tr>
-<tr><td>Product</td><td colspan="5">${escapeHtml(data.productName)}</td></tr>
-<tr>
-<th>#</th><th>Sale Price</th><th>Quantity</th>
-<th>Total Sale</th><th>Cost</th><th>Profit/Loss</th>
-</tr>`;
+createExcelRecord(item);
 
-data.sales.forEach((sale,i)=>{
-const saleTotal=n(sale.price)*n(sale.qty);
-const cost=n(data.actualCostPerPiece)*n(sale.qty);
-const profit=saleTotal-cost;
-
-rows+=`
-<tr>
-<td>${i+1}</td><td>${n(sale.price).toFixed(2)}</td>
-<td>${n(sale.qty)}</td><td>${saleTotal.toFixed(2)}</td>
-<td>${cost.toFixed(2)}</td><td>${profit.toFixed(2)}</td>
-</tr>`;
-});
-
-rows+=`
-<tr>
-<th colspan="3">TOTAL</th>
-<th>${n(data.totalSale).toFixed(2)}</th>
-<th>${n(data.totalCost).toFixed(2)}</th>
-<th>${n(data.profitLoss).toFixed(2)}</th>
-</tr>`;
-
-const html=`<html><head><meta charset="UTF-8">
-<style>
-table{border-collapse:collapse;width:100%}
-th,td{border:1px solid #888;padding:8px}
-th{background:#dbeafe}
-</style></head><body><table>${rows}</table></body></html>`;
-
-const blob=new Blob(["\ufeff",html],{type:"application/vnd.ms-excel"});
-const url=URL.createObjectURL(blob);
-const a=document.createElement("a");
-
-a.href=url;
-a.download=safeName(data.productName)+"-profit.xls";
-document.body.appendChild(a);
-a.click();
-a.remove();
-
-setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
 function historyPDF(id){
+
 const item=findHistory(id);
-if(!item){alert("History পাওয়া যায়নি।");return}
+
+if(!item){
+
+alert("History পাওয়া যায়নি।");
+return;
+
+}
+
 createPDFForRecord(item);
+
 }
 
 function deleteHistory(id){
+
 if(!confirm("এই History Delete করবেন?"))return;
 
-const updated=getHistory().filter(
+const updated=
+getHistory().filter(
 item=>Number(item.id)!==Number(id)
 );
 
 saveHistory(updated);
+
 renderHistory();
+
 }
 
-/* Fix history Excel function */
-function createExcelRecord(data){
-let rows=`
+/* -------------------- NEW RECORD INIT -------------------- */
 
-<tr><th colspan="6">Profit Calculator</th></tr>
-<tr><td>Product Name</td><td colspan="5">${escapeHtml(data.productName)}</td></tr>
-<tr><td>Batch</td><td>${data.batch}</td><td>Sold</td><td>${data.soldQty}</td><td>Remaining</td><td>${data.remaining}</td></tr>
-<tr><th>#</th><th>Sale Price</th><th>Quantity</th><th>Total Sale</th><th>Cost</th><th>Profit/Loss</th></tr>`;
+function initializeNewRecord(){
 
-data.sales.forEach((sale,i)=>{
-const saleTotal=n(sale.price)*n(sale.qty);
-const cost=n(data.actualCostPerPiece)*n(sale.qty);
-const profit=saleTotal-cost;
+/*
+Only initialize if there is no existing value.
+This prevents date/time from changing on every calculation.
+*/
 
-rows+=`
+const productDate=
+document.getElementById("productDateTime");
 
-<tr><td>${i+1}</td><td>${n(sale.price).toFixed(2)}</td>
-<td>${n(sale.qty)}</td><td>${saleTotal.toFixed(2)}</td>
-<td>${cost.toFixed(2)}</td><td>${profit.toFixed(2)}</td></tr>`;
-});
+if(!productDate.value){
 
-rows+=`<tr><th colspan="3">TOTAL</th>
+productDate.value=
+getCurrentDateTime();
 
-<th>${n(data.totalSale).toFixed(2)}</th>
-<th>${n(data.totalCost).toFixed(2)}</th>
-<th>${n(data.profitLoss).toFixed(2)}</th></tr>`;
-
-const html=`<html><head><meta charset="UTF-8">
-
-<style>table{border-collapse:collapse;width:100%}th,td{border:1px solid #888;padding:8px}th{background:#dbeafe}</style>
-
-</head><body><table>${rows}</table></body></html>`;
-
-const blob=new Blob(["\ufeff",html],{type:"application/vnd.ms-excel"});
-const url=URL.createObjectURL(blob);
-const a=document.createElement("a");
-a.href=url;
-a.download=safeName(data.productName)+"-profit.xls";
-document.body.appendChild(a);
-a.click();
-a.remove();
-setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
 
-/* PWA Service Worker registration */
+const firstSale=
+document.querySelector("#saleBody tr");
+
+if(firstSale){
+
+const saleDate=
+firstSale.querySelector(".sale-date");
+
+if(!saleDate.value){
+
+saleDate.value=
+getCurrentDateTime();
+
+}
+
+}
+
+}
+
+/* -------------------- SERVICE WORKER -------------------- */
+
 if("serviceWorker" in navigator){
+
 window.addEventListener("load",()=>{
+
 navigator.serviceWorker.register("./sw.js")
 .then(()=>console.log("Offline mode ready"))
 .catch(err=>console.log("Service Worker:",err));
+
 });
+
 }
 
+/* -------------------- DOM READY -------------------- */
+
 document.addEventListener("DOMContentLoaded",()=>{
+
+initializeNewRecord();
+
 updateRowNumbers();
+
 renderHistory();
+
 calculate();
-}); </script>
+
+});
+
+</script>
 
 </body>
 </html>
