@@ -1,76 +1,78 @@
-const CACHE_NAME = "profit-calculator-v5";
+const CACHE_NAME = "profit-calculator-v6";
 
 const APP_FILES = [
-"./",
-"./index.html",
-"./manifest.json",
-"./sw.js"
+  "./",
+  "./index.html",
+  "./manifest.json",
+  "./sw.js"
 ];
 
 self.addEventListener("install", event => {
-event.waitUntil(
-caches.open(CACHE_NAME).then(cache => {
-return cache.addAll(APP_FILES);
-})
-);
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(APP_FILES);
+    })
+  );
 
-self.skipWaiting();
+  self.skipWaiting();
 });
 
 self.addEventListener("activate", event => {
-event.waitUntil(
-caches.keys().then(keys => {
-return Promise.all(
-keys
-.filter(key => key !== CACHE_NAME)
-.map(key => caches.delete(key))
-);
-})
-);
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(
+        keys
+          .filter(key => key !== CACHE_NAME)
+          .map(key => caches.delete(key))
+      )
+    )
+  );
 
-self.clients.claim();
+  self.clients.claim();
 });
 
 self.addEventListener("fetch", event => {
 
-if (event.request.method !== "GET") {
-return;
-}
-
-event.respondWith(
-caches.match(event.request).then(cachedResponse => {
-
-  if (cachedResponse) {
-    return cachedResponse;
+  if (event.request.method !== "GET") {
+    return;
   }
 
-  return fetch(event.request)
-    .then(response => {
+  event.respondWith(
 
-      if (
-        response &&
-        response.status === 200 &&
-        response.type === "basic"
-      ) {
+    caches.match(event.request).then(cached => {
 
-        const responseClone = response.clone();
-
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(event.request, responseClone);
-        });
-
+      if (cached) {
+        return cached;
       }
 
-      return response;
+      return fetch(event.request)
+        .then(response => {
+
+          if (
+            response &&
+            response.status === 200 &&
+            response.type === "basic"
+          ) {
+
+            const copy = response.clone();
+
+            caches.open(CACHE_NAME).then(cache => {
+              cache.put(event.request, copy);
+            });
+
+          }
+
+          return response;
+
+        })
+        .catch(() => {
+
+          return caches.match("./index.html");
+
+        });
 
     })
-    .catch(() => {
-      return caches.match("./index.html");
-    });
 
-})
-
-
-);
+  );
 
 });
