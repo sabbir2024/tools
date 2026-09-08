@@ -1,0 +1,12 @@
+{
+"name": "Profit Calculator",
+"short_name": "Profit Calc",
+"description": "Product sale profit and loss calculator",
+"start_url": "./",
+"scope": "./",
+"display": "standalone",
+"orientation": "portrait",
+"background_color": "#f1f5f9",
+"theme_color": "#4f46e5",
+"icons": []
+}
